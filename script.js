@@ -1,14 +1,19 @@
-function addImgForLazyLoading(highTarget, src) {
+function addImgForLazyLoading(highTarget, src, highImgTarget) {
+    var imageAdded = false;
     function addPromiseToImg(path) {
         return new Promise(function (resolve, reject) {
-            var img = document.createElement('img');
-            img.src = path;
-            img.addEventListener('load', function () {
-                resolve(img);
-            });
-            img.addEventListener('error', function () {
-                reject(new Error("image: ".concat(path, " load error")));
-            });
+            if (highImgTarget) {
+                highImgTarget.src = path;
+                highImgTarget.addEventListener('load', function () {
+                    resolve(highImgTarget);
+                });
+                highImgTarget.addEventListener('error', function () {
+                    reject(new Error("image: ".concat(path, " load error")));
+                });
+            }
+            else {
+                reject(new Error("image: ".concat(highImgTarget, " not found")));
+            }
         });
     }
     function addImage(target) {
@@ -26,7 +31,6 @@ function addImgForLazyLoading(highTarget, src) {
             }
         }
     }
-    var imageAdded = false;
     function onScroll() {
         if (highTarget) {
             addImage(highTarget);
@@ -37,4 +41,5 @@ function addImgForLazyLoading(highTarget, src) {
     }
 }
 var targetLast = document.querySelector('#targetLastBlock');
-addImgForLazyLoading(targetLast, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvkVTnPAhOLoRmZwK6-m2VsR-SqRu_meVJ9w&s');
+var lazyLoad__Img = document.querySelector('#lazyLoad__Img');
+addImgForLazyLoading(targetLast, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvkVTnPAhOLoRmZwK6-m2VsR-SqRu_meVJ9w&s', lazyLoad__Img);

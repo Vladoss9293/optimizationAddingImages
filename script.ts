@@ -1,16 +1,21 @@
-function addImgForLazyLoading (highTarget: HTMLDivElement | null, src: string): void {
+function addImgForLazyLoading (highTarget: HTMLDivElement | null, src: string, highImgTarget: HTMLImageElement | null): void {
+    let imageAdded: boolean = false;
+
     function addPromiseToImg(path: string): Promise<HTMLImageElement> {
         return new Promise((resolve, reject) => {
-            let img = document.createElement('img');
-            img.src = path;
-    
-            img.addEventListener('load', () => {
-                resolve(img);
-            });
-    
-            img.addEventListener('error', () => {
-                reject(new Error(`image: ${path} load error`));
-            })
+            if (highImgTarget) {
+                highImgTarget.src = path;
+        
+                highImgTarget.addEventListener('load', () => {
+                    resolve(highImgTarget);
+                });
+        
+                highImgTarget.addEventListener('error', () => {
+                    reject(new Error(`image: ${path} load error`));
+                })
+            } else {
+                reject(new Error(`image: ${highImgTarget} not found`))
+            }
         })
     }
 
@@ -31,8 +36,6 @@ function addImgForLazyLoading (highTarget: HTMLDivElement | null, src: string): 
         }
     }
     
-    let imageAdded: boolean = false;
-    
     function onScroll() {
         if (highTarget) {
             addImage(highTarget);
@@ -45,5 +48,6 @@ function addImgForLazyLoading (highTarget: HTMLDivElement | null, src: string): 
 }
 
 const targetLast: HTMLDivElement | null = document.querySelector('#targetLastBlock');
+const lazyLoad__Img: HTMLImageElement | null = document.querySelector('#lazyLoad__Img');
 
-addImgForLazyLoading(targetLast, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvkVTnPAhOLoRmZwK6-m2VsR-SqRu_meVJ9w&s');
+addImgForLazyLoading(targetLast, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvkVTnPAhOLoRmZwK6-m2VsR-SqRu_meVJ9w&s', lazyLoad__Img);
