@@ -1,0 +1,2 @@
+# optimizationAddingImages
+typescript: optimizationAddingImages
