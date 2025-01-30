@@ -14,7 +14,7 @@ function addImgForLazyLoading(highTarget, src) {
     function addImage(target) {
         if (target && !imageAdded) {
             var rect = target.getBoundingClientRect();
-            console.log('123123');
+            console.warn('>> scroll tracking <<');
             if (rect.top >= 0 && rect.left >= 0 && rect.bottom <= window.innerHeight && rect.right <= window.innerWidth) {
                 imageAdded = true;
                 addPromiseToImg(src).then(function (img) {
